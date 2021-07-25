@@ -1,10 +1,16 @@
 const express = require("express");
+const mongoose = require("mongoose");
 
 // express app
 const app = express();
 
-// listen for requests
-app.listen(3000);
+// Connect to Mongodb
+const dbURI =
+  "mongodb+srv://Nightfury:Srinudevi7678@blogpage.4f6n4.mongodb.net/Blog-Page?retryWrites=true&w=majority";
+mongoose
+  .connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then((result) => app.listen(3000, () => console.log("Server Started")))
+  .catch((err) => console.log(err));
 
 app.get("/", (req, res) => {
   // res.send('<p>home page</p>');
