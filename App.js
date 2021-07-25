@@ -69,6 +69,19 @@ app.delete("/article/:id", (req, res) => {
     });
 });
 
+app.post("/article", (req, res) => {
+  const article = new Article(req.body);
+
+  article
+    .save()
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 // app.get("/articles", (req, res) => {
 //   Article.find()
 //     .sort({ createdAt: -1 })
