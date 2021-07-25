@@ -108,6 +108,21 @@ app.post("/article/:id", getArticle, async (req, res) => {
   }
 });
 
+app.post("/:id/like", getArticle, async (req, res) => {
+  try {
+    const article = req.article;
+    if (article.views > article.likes) {
+      article.likes = ++article.likes;
+    }
+    console.log(article);
+    article.save((err, newArticle) => {
+      return res.json(newArticle);
+    });
+  } catch (e) {
+    res.status(400).json({ message: e.message });
+  }
+});
+
 app.get("/trending", async (req, res) => {
   try {
     const articles = await Article.find().sort({ views: -1 });
