@@ -16,7 +16,7 @@ const articleSchema = new Schema(
       required: true,
     },
 
-    clicks: {
+    views: {
       type: Number,
       default: 0,
     },
