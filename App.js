@@ -57,6 +57,18 @@ app.get("/article/:id", (req, res) => {
     });
 });
 
+app.delete("/article/:id", (req, res) => {
+  const id = req.params.id;
+
+  Article.findByIdAndDelete(id)
+    .then((result) => {
+      res.send(`${id} deleted`);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 // app.get("/articles", (req, res) => {
 //   Article.find()
 //     .sort({ createdAt: -1 })
