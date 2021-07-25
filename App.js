@@ -4,6 +4,7 @@ const Article = require("./Models/Article");
 
 // express app
 const app = express();
+app.use(express.json());
 
 // Connect to Mongodb
 const dbURI =
@@ -30,9 +31,9 @@ app.get("/add-article", (req, res) => {
     });
 });
 
-app.get("/articles", (req, res) => {
-  res.render("create", { title: "Create a new blog" });
-});
+// app.get("/articles", (req, res) => {
+//   res.render("create", { title: "Create a new blog" });
+// });
 
 app.get("/article", (req, res) => {
   Article.find()
@@ -44,13 +45,25 @@ app.get("/article", (req, res) => {
     });
 });
 
-app.get("/articles", (req, res) => {
-  Article.find()
-    .sort({ createdAt: -1 })
+app.get("/article/:id", (req, res) => {
+  const id = req.params.id;
+
+  Article.findById(id)
     .then((result) => {
-      res.render("index", { article: result, title: "All articles" });
+      res.send(result);
     })
     .catch((err) => {
       console.log(err);
     });
 });
+
+// app.get("/articles", (req, res) => {
+//   Article.find()
+//     .sort({ createdAt: -1 })
+//     .then((result) => {
+//       res.render("index", { article: result, title: "All articles" });
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     });
+// });
