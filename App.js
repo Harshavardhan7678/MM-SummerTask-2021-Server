@@ -82,6 +82,19 @@ app.post("/article", (req, res) => {
     });
 });
 
+app.put("/article/:id", (req, res) => {
+  const id = req.params.id;
+  const about = req.body;
+
+  Article.findByIdAndUpdate(id, about, { new: true })
+    .then((result) => {
+      res.send("Update");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
 // app.get("/articles", (req, res) => {
 //   Article.find()
 //     .sort({ createdAt: -1 })
