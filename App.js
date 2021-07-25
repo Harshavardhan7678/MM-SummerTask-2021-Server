@@ -95,6 +95,21 @@ app.put("/article/:id", (req, res) => {
     });
 });
 
+async function getArticle(req, res, next) {
+  let article;
+  try {
+    article = await Article.findById(req.params.id);
+
+    if (article == null) {
+      return res.status(404).json({ message: "Can't find Article" });
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+  req.article = article;
+  next();
+}
+
 // app.get("/articles", (req, res) => {
 //   Article.find()
 //     .sort({ createdAt: -1 })
