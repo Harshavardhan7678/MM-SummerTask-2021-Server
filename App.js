@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const Article = require("./Models/Article");
 
 // express app
 const app = express();
@@ -12,22 +13,44 @@ mongoose
   .then((result) => app.listen(3000, () => console.log("Server Started")))
   .catch((err) => console.log(err));
 
-app.get("/", (req, res) => {
-  // res.send('<p>home page</p>');
-  res.sendFile("./views/index.html", { root: __dirname });
+app.get("/add-article", (req, res) => {
+  const article = new Article({
+    overline: "March 31, 2021",
+    heading: "What happened in Thailand?",
+    body: "Kayaks crowd Three Sisters Springs, where people and manatees maintain controversial coexistence.",
+  });
+
+  article
+    .save()
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
-app.get("/about", (req, res) => {
-  // res.send('<p>about page</p>');
-  res.sendFile("./views/about.html", { root: __dirname });
+app.get("/articles", (req, res) => {
+  res.render("create", { title: "Create a new blog" });
 });
 
-// redirects
-app.get("/about-us", (req, res) => {
-  res.redirect("/about");
+app.get("/article", (req, res) => {
+  Article.find()
+    .then((result) => {
+      res.send(result);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
-// 404 page
-app.use((req, res) => {
-  res.status(404).sendFile("./views/404.html", { root: __dirname });
+app.get("/articles", (req, res) => {
+  Article.find()
+    .sort({ createdAt: -1 })
+    .then((result) => {
+      res.render("index", { article: result, title: "All articles" });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
