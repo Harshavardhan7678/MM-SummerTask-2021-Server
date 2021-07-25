@@ -123,6 +123,19 @@ app.post("/:id/like", getArticle, async (req, res) => {
   }
 });
 
+app.delete("/:id/like", getArticle, async (req, res) => {
+  try {
+    const article = req.article;
+    if (article.likes >= 1) article.likes = --article.likes;
+
+    article.save((err, newArticle) => {
+      return res.json(newArticle);
+    });
+  } catch (e) {
+    res.status(400).json({ message: e.message });
+  }
+});
+
 app.get("/trending", async (req, res) => {
   try {
     const articles = await Article.find().sort({ views: -1 });
@@ -147,14 +160,3 @@ async function getArticle(req, res, next) {
   req.article = article;
   next();
 }
-
-// app.get("/articles", (req, res) => {
-//   Article.find()
-//     .sort({ createdAt: -1 })
-//     .then((result) => {
-//       res.render("index", { article: result, title: "All articles" });
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     });
-// });
